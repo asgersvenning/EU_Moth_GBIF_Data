@@ -1,0 +1,68 @@
+---
+title: "Project Reproducibility Log"
+author: "Asger Svenning"
+date: "`r Sys.Date()`"
+output: 
+  bookdown::pdf_document2:
+    toc: true
+    number_sections: true
+    includes:
+      in_header: "log_preamble.tex"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Goal
+Create a (*high-quality*) comprehensive image-species data set of (*adult*) European Moths. The process was simplified by using the **G**lobal **B**iodiversity **I**nformation **F**acility (GBIF) as the primary data source.
+
+# Data overview
+\todo{Include the PDF for the report in the reproducibility folder. Possibly as an appendix to this document.} A report on the data, and analyses conducted throughout the data collection process, is being constructed separately in Overleaf.
+
+# Species list
+The lists of considered moth species can be found in 'countries.rds' and was provided by Jurriën van Deijk through Toke T. Høje.
+
+The list contains approximately $42\,000$ items, each corresponding to a species name coupled with an area or country within the European Union.
+
+# Area names
+Area names are provided in plain English, however in order to properly use the GBIF API, it is necessary to convert plain names to Database of **G**lobal **Adm**inistrative Areas (GADM) area codes; i.e. a name resolution service or pipeline is necessary. In this project I use a relatively simple purpose-built pipeline for geographic name resolution, described below.
+
+## 1. GADM Data Access
+The full GADM database can be downloaded at: \url{https://gadm.org/download_world.html}.
+
+## 2. GADM Preprocessing
+In order to speed up some of the later steps in the pipeline, the global GADM GIS file is filtered in QGIS by selecting features using the expression:
+
+> \texttt{
+  NOT (NAME\_1='Islas Canarias' OR NAME\_0='Northern Cyprus' OR NAME\_0='Cyprus' OR NAME\_0='Akrotiri and Dhekelia' OR NAME\_0='Gibraltar' OR CONTINENT='Europe' OR COUNTRY='Russia' OR COUNTRY='Turkey')
+}
+
+And selected features are then deleted. The result is then exported as an ESRI Shapefile for further use.
+
+## 3. Geographic Name Resolution
+The script \texttt{fix\_countries\_for\_GBIF.R} takes in the species list, the filtered GADM ESRI Shapefile and a result name, defined as variables at the beginning of the script, and saves a dataframe in a file with the result name. The data frame contains the following:    
+
+\begin{itemize}
+  \item[\textbf{NAME\_0}] Name of the most broad administrative border for a species list.
+  \item[\textbf{country}] Name of the “country” for a species list (supplied by Jurriën van Deijk)
+  \item[\textbf{CO\_Lookup}] Some geographical identifier (supplied by Jurriën van Deijk)
+  \item[\textbf{GID\_0}] Canonical(GADM) UUID of the most broad administrative border for a species list.
+  \item[\textbf{list\_match}] Non-technical description(but also unprecise) of the geographical scope for a species list.
+  \item[\textbf{mothData}] Nested dataframe containing the list of species and the (non-)native status of each.
+  \item[\textbf{NAME\_1}] Name(s) of the second-most broad administrative border (usually municipality) which the species list cover.
+  \item[\textbf{GID\_1}] Canonical UUID for “NAME\_1”.
+  \item[\textbf{ISO\_1}] A currently unused geographical identifier.
+\end{itemize}
+
+# GBIF
+
+## Quality control flags
+
+## Building requests
+
+## DOIs
+```{r}
+list.files("../GBIF_Downloads")
+```
+
