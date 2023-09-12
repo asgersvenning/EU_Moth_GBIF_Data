@@ -2,24 +2,6 @@ library(tidyverse)
 library(magrittr)
 library(sf)
 
-library(extrafont)
-library(ggpubr)
-library(ggforce)
-
-theme_set(
-  theme_pubr(
-    base_family = "CMU Serif",
-    legend = "right"
-  ) +
-    theme(
-      title = element_text(face = "bold",
-                           size = 14),
-      plot.title = element_text(face = "plain",
-                                size = 20,
-                                hjust = .5)
-    )
-)
-
 geography <- read_sf("cleanedGeography/countries_GADM.gpkg") %>% 
   nngeo::st_remove_holes(10^7)
 

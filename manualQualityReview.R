@@ -3,6 +3,18 @@ library(furrr)
 library(future)
 source("utils/browseImages.R")
 
+## Setup
+# Change these if you want to use other classes than the ones I have built in.
+main_classes <- c("Larvae", "Adult", "Other")
+# This only applies if you use a class called "Adult".
+adult_subclasses <- c("Blurry", "Visible", "Clear", "HD")
+
+# This defines the directory which will contain the quality annotated images.
+quality_review_destination <- "quality_review"
+
+# Future context (OS-specific, default applies for Windows)
+future_context <- "multisession"
+
 if (!file.exists("GBIF_combined_distinct.rds")) {
   GBIF_combined_distinct <- read_rds("GBIF_combined.rds") %>% 
     distinct(gbifID, .keep_all = TRUE) 
@@ -199,7 +211,7 @@ annotate_images <- function(df, urls, names, dst_dir,
   }
   
   if (workers > 1) {
-    old_plan <- plan("multisession", workers = workers)
+    old_plan <- plan(future_context, workers = workers)
     on.exit({
       future::plan(old_plan)
       }, add = TRUE)
@@ -280,7 +292,7 @@ annotate_images <- function(df, urls, names, dst_dir,
       prompt = function(desc = this_description) {
         # First ask if the image is in either of these super-classes, or to abort annotation
         user_select <- select.list(
-          c("Larvae", "Adult", "Other", "STOP", "Change Last Classification"),
+          c(main_classes, "STOP", "Change Last Classification"),
           title = desc
         )
         # if the user chooses to remove the last annotation, remove the last annotation (cursed)
@@ -331,7 +343,7 @@ annotate_images <- function(df, urls, names, dst_dir,
         }
         # If the user selects the class "Adult" ask which qualitative quality the image has
         if (user_select == "Adult") user_select <- select.list(
-          c("Blurry", "Visible", "Clear", "HD"),
+          adult_subclasses,
           title = this_description
         )
         # Create the file-name at the appropriate sub-directory according to the user-selected class
@@ -406,7 +418,7 @@ annotated_images <- GBIF_combined_distinct %>%
   annotate_images(
     "identifier",
     'name',
-    dst_dir = "quality_review_v3",
+    dst_dir = quality_review_destination,
     force_restart = FALSE,
     check_log = TRUE
   ) 

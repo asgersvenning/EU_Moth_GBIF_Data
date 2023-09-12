@@ -31,6 +31,11 @@ email <- "INSERT_YOUR_GBIF_EMAIL_HERE"
 # !!IMPORTANT!! Default file name is "pwd" and is already added to the .gitignore !!IMPORTANT!!
 password <- "pwd" 
 
+# Sanity check user input
+if (user ==" INSERT_YOUR_GBIF_USERNAME_HERE" | email == "INSERT_YOUR_GBIF_EMAIL_HERE" | !file.exists(password)) {
+  stop("Incorrect or incomplete GBIF credentials supplied!")
+}
+
  ##### Robust function for creating a valid GBIF API query for species and GADM_1 area lists #####
 ## Description
 # Includes all* (hopefully) the necessary type-checks to ensure that run-time errors occur before 
@@ -349,11 +354,11 @@ moth_lists <- read_rds("moth_species_with_GADM.rds")
 
 if (!file.exists("speciesKeyDict.csv")) {
   speciesKeyDict <- moth_lists %>% 
-  unnest(mothData) %>% 
-  distinct(internal_taxon_name) %>% 
-  mutate(
-    taxonKey = map_int(internal_taxon_name, get_taxonKey_from_name)
-  )
+    unnest(mothData) %>% 
+    distinct(internal_taxon_name) %>% 
+    mutate(
+      taxonKey = map_int(internal_taxon_name, get_taxonKey_from_name)
+    )
   write_csv2(speciesKeyDict, "speciesKeyDict.csv")
 } else {
   speciesKeyDict <- read_csv2("speciesKeyDict.csv")
@@ -369,7 +374,7 @@ moth_lists <- moth_lists %>%
   )
 
 stalled_requests <- tibble(
-  download_code = read_lines("stalledDownloadRequests.txt")
+  download_code = if (file.exists("stalledDownloadRequests.txt")) read_lines("stalledDownloadRequests.txt") else numeric()
 ) %>% 
   drop_na %>% 
   filter(nchar(download_code) > 10) %>% 

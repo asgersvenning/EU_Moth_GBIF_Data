@@ -4,7 +4,7 @@ pwd
 .RData
 .RDataTmp
 *.Rproj
-quality_review_v*
+quality_review*
 *.tmp
 *.docx
 GBIF_combined*

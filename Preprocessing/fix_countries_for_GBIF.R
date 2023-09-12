@@ -100,10 +100,11 @@ GADM_GID_1_aggr <- GADM_GID_1 %>%
   st_difference(.) 
 
 
-GADM_GID_1_aggr %>% 
-  filter(CONTINENT != "Asia" | COUNTRY == "Turkey") %>% 
-  ggplot(aes(fill = GID_0)) +
-  geom_sf()
+# Debugging plot
+# GADM_GID_1_aggr %>% 
+#   filter(CONTINENT != "Asia" | COUNTRY == "Turkey") %>% 
+#   ggplot(aes(fill = GID_0)) +
+#   geom_sf()
 
 
 nsp_countries <- countries %>% 
