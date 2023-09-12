@@ -16,5 +16,5 @@ An RMarkdown file for creating a reproducibility reprot can be found in the `Rep
 4. Run the `Preprocessing/SummarizeGBIFData.R` script. This scripts combines all of the results from the GBIF API with the GADM features for easy data visualization purposes and further use. The resulting files are *quite* large.
 5. If you want to produce a quality annotated dataset, then the script `manualQualityReview.R` provides a super-efficient RStudio keyboard-only annotation tool. The tool can be easily be modified to use a different class-structure than I have used, simply change the variables that are defined under the comment `Setup` in the beginning of the script. **OBS**: the script uses the `"future"` package for multiprocessing, which is requires OS-specific setup, by default it is set up for Windows. If you use another OS, you must change the `future_context` variable appropriately! (Requires knowledge of the `"future"` package.
 
-### Result use without running preprocessing.
+### Use data without running preprocessing.
 The zip-file `MothEU_barebones.zip` contains a csv file with the resulting list of images, a single image from each observation have been chosen arbitrarily.
