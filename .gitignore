@@ -14,3 +14,4 @@ MothEU_barebones.csv
 stalledDownloadRequests.txt
 speciesMatchLog.txt
 GADM*
+figures/**.pdf
