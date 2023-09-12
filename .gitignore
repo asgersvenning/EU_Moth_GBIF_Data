@@ -1,0 +1,16 @@
+pwd
+.Rproj.user
+.Rhistory
+.RData
+.RDataTmp
+*.Rproj
+quality_review_v*
+*.tmp
+*.docx
+GBIF_combined*
+GBIF_downloads*
+GBIF_image_metadata*
+MothEU_barebones.csv
+stalledDownloadRequests.txt
+speciesMatchLog.txt
+GADM*
