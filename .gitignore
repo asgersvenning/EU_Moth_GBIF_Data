@@ -16,3 +16,6 @@ speciesMatchLog.txt
 GADM*
 figures/*.pdf
 Reproducibility/*.pdf
+temp*
+dataOverview*
+*.log
